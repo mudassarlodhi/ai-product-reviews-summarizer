@@ -38,10 +38,10 @@ Run the following commands in sequence to set up your root shared packages, fron
 bun install
 
 # 2. Setup the client package
-cd packages/client && bun install && cd ../..
+cd packages/client && bun install
 
 # 3. Setup the server package
-cd packages/server && bun install && cd ../..
+cd packages/server && bun install
 ```
 
 ### 3. Environment Variables Setup (`.env`)
@@ -52,9 +52,9 @@ You need to provide your database connection credentials and your OpenAI platfor
 DATABASE_URL="postgresql://YOUR_POSTGRES_USER:YOUR_POSTGRES_PASSWORD@localhost:5432/review_summarizer?schema=public"
 ```
 
-**Backend OpenAPI Key (`apps/api/.env`):**
+**Backend OpenAPI Key:**
 ```env
-AI_API_KEY="your_actual_ai_api_key_here"
+OPENAI_API_KEY="your_actual_ai_api_key_here"
 ```
 ### 4. Database & Prisma ORM Setup
 
@@ -72,8 +72,6 @@ bunx prisma migrate dev
 
 # 2. Explicitly generates the Prisma Client types inside your monorepo node_modules
 bunx prisma generate
-
-cd ../..
 ```
 
 #### 🔄 Modifying the Database Later
@@ -87,8 +85,6 @@ bunx prisma migrate dev --name describe_your_change
 
 # 2. Re-generates the updated types for your frontend and backend
 bunx prisma generate
-
-cd ../..
 ```
 
 
