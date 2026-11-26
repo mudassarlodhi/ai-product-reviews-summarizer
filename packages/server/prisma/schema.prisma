@@ -12,25 +12,82 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id     Int     @id @default(autoincrement())
+  name   String @db.VarChar(255)
+  email String  @unique
+  orders Order[]
+
+  @@map("users")
+}
+
+model Category {
+  id  Int     @id @default(autoincrement())
+  name String @db.VarChar(255)
+  products Product[]
+
+  @@map("categories")
+}
+
+model Store {
+  id  Int     @id @default(autoincrement())
+  name String @db.VarChar(255)
+  products Product[]
+
+  @@map("stores")
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  unitPrice Decimal  @db.Decimal(10, 2)
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  review    Review?
+
+  @@unique([orderId, productId])
+  @@unique([id, productId])
+  @@map("order_items")
+}
+
 model Product {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(455)
   description String?  @db.Text()
-  price       Float    @db.Real()
-  reviews     Review[]
-  summary     Summary?
+  price       Decimal  @db.Decimal(10, 2)
+  storeId    Int
+  categoryId Int
+  store      Store    @relation(fields: [storeId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+  reviews    Review[]
+  summary    Summary?
 
   @@map("products")
 }
 
 model Review {
-  id        Int      @id @default(autoincrement())
-  author    String   @db.VarChar(255)
-  rating    Int      @db.SmallInt()
-  content   String   @db.Text()
-  createdAt DateTime @default(now())
-  productId Int
-  product   Product  @relation(fields: [productId], references: [id])
+  id          Int       @id @default(autoincrement())
+  rating      Int       @db.SmallInt()
+  content     String    @db.Text()
+  createdAt   DateTime  @default(now())
+  productId   Int
+  product     Product   @relation(fields: [productId], references: [id])
+  orderItemId Int       @unique
+  orderItem   OrderItem @relation(fields: [orderItemId, productId], references: [id, productId])
+  @@unique([orderItemId, productId])
 
   @@map("reviews")
 }
