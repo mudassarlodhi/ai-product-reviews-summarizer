@@ -58,6 +58,9 @@ OPENAI_API_KEY="your_actual_ai_api_key_here"
 ```
 ### 4. Database & Prisma ORM Setup
 
+#### ERD of our system is given below:
+![ Entity Relationship Diagram](./.github/erd.png)
+
 #### 🗄️ First-Time Database Setup (For Beginners)
 
 If you are setting up this database for the first time, you need to apply the existing migration files to your PostgreSQL instance and explicitly generate the TypeScript client types for your workspaces.
